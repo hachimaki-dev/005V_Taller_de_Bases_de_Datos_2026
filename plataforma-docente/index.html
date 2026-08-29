@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plataforma Docente | Taller de Bases de Datos</title>
+    <meta name="description" content="Material docente interactivo para el curso Taller de Bases de Datos — Oracle PL/SQL">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/app.css">
+    <link rel="stylesheet" href="css/slides.css">
+    <link rel="stylesheet" href="css/exercises.css">
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+<body>
+    <div id="app" v-cloak class="app-shell">
+
+        <!-- Mobile header -->
+        <header class="mobile-bar">
+            <button @click="sidebarOpen = !sidebarOpen"><i class="ph ph-list"></i></button>
+            <h1>Taller BD</h1>
+        </header>
+
+        <!-- Sidebar -->
+        <aside class="sidebar" :class="{ open: sidebarOpen }">
+            <div class="sidebar-brand">
+                <span class="alien">👽</span>
+                <h2>Taller BD<small>Material Docente</small></h2>
+            </div>
+            <nav class="sidebar-nav">
+                <button class="nav-link" :class="{ active: view === 'home' }" @click="goHome()">
+                    <i class="ph ph-house"></i> Inicio
+                </button>
+                <div class="nav-divider"></div>
+                <div v-for="mod in course.modules" :key="mod.id" class="nav-group">
+                    <div class="nav-group-label">{{ mod.title }}</div>
+                    <button v-for="s in mod.sessions" :key="s.id"
+                            class="nav-link"
+                            :class="{ active: view === 'session' && session && session.id === s.id }"
+                            @click="openSession(s)">
+                        <i class="ph ph-chalkboard-teacher"></i>
+                        <span>{{ s.title }}</span>
+                    </button>
+                </div>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="avatar"><i class="ph-fill ph-alien"></i></div>
+                <div class="meta">
+                    <strong>hachimaki-dev</strong>
+                    <span>Instructor</span>
+                </div>
+            </div>
+        </aside>
+
+        <div class="overlay" :class="{ visible: sidebarOpen }" @click="sidebarOpen = false"></div>
+
+        <!-- Main -->
+        <main class="main">
+
+            <!-- HOME -->
+            <template v-if="view === 'home'">
+                <div class="dashboard-hero fade-in">
+                    <h1>Taller de Bases de Datos</h1>
+                    <p>Selecciona una sesión del menú para acceder a las presentaciones, guías de ejercicios y solucionarios.</p>
+                </div>
+                <div class="module-grid">
+                    <div v-for="mod in course.modules" :key="'d-'+mod.id" class="module-card fade-in">
+                        <h3>{{ mod.title }} <span class="badge">{{ mod.sessions.length }} sesiones</span></h3>
+                        <ul>
+                            <li v-for="s in mod.sessions" :key="'d-'+s.id" @click="openSession(s)">
+                                <i class="ph ph-caret-right"></i> {{ s.title }}
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </template>
+
+            <!-- SESSION -->
+            <template v-if="view === 'session' && session">
+                <div class="fade-in">
+                    <div class="session-breadcrumb">{{ getModuleTitle(session.id) }}</div>
+                    <h1 class="session-title">{{ session.title }}</h1>
+
+                    <div class="tabs">
+                        <button class="tab" :class="{ active: tab === 'slides' }" @click="tab = 'slides'">
+                            <i class="ph ph-presentation"></i> Presentación
+                        </button>
+                        <button class="tab" :class="{ active: tab === 'exercises' }" @click="tab = 'exercises'">
+                            <i class="ph ph-pencil-line"></i> Guía Práctica
+                        </button>
+                        <button class="tab" :class="{ active: tab === 'solutions' }" @click="tab = 'solutions'">
+                            <i class="ph ph-check-circle"></i> Solucionario
+                        </button>
+                    </div>
+
+                    <div class="tab-panel">
+                        <slide-viewer v-if="tab === 'slides' && currentSlides" :slides="currentSlides" :key="session.id + '-slides'"></slide-viewer>
+                        <exercise-runner v-if="tab === 'exercises' && currentExercises" :exercises="currentExercises" :solutions="currentSolutions" :key="session.id + '-ex'"></exercise-runner>
+                        <exercise-runner v-if="tab === 'solutions' && currentExercises" :exercises="currentExercises" :solutions="currentSolutions" :is-solution-tab="true" :key="session.id + '-sol'"></exercise-runner>
+                    </div>
+                </div>
+            </template>
+
+        </main>
+    </div>
+
+    <!-- Data files -->
+    <script src="js/data/course-structure.js"></script>
+    <script src="js/data/s1_3_1_slides.js"></script>
+    <script src="js/data/s1_3_1_exercises.js"></script>
+    <script src="js/data/s1_3_1_solutions.js"></script>
+    <script src="js/data/s1_3_2_slides.js"></script>
+    <script src="js/data/s1_3_2_exercises.js"></script>
+    <script src="js/data/s1_3_2_solutions.js"></script>
+    <script src="js/data/s1_4_1_slides.js"></script>
+    <script src="js/data/s1_4_1_exercises.js"></script>
+    <script src="js/data/s1_4_1_solutions.js"></script>
+    <script src="js/data/s1_4_2_slides.js"></script>
+    <script src="js/data/s1_4_2_exercises.js"></script>
+    <script src="js/data/s1_4_2_solutions.js"></script>
+
+    <!-- Components -->
+    <script src="js/components/SlideViewer.js"></script>
+    <script src="js/components/ExerciseRunner.js"></script>
+
+    <!-- App -->
+    <script src="js/app.js"></script>
+</body>
+</html>

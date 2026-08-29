@@ -1,0 +1,748 @@
+/* ============================================================
+   EXERCISES.CSS — Estilos para ejercicios interactivos
+   Motor de guías: alternativas, V/F, completar código, etc.
+   ============================================================ */
+
+/* Exercise container */
+.exercise-runner {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.exercise-progress {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    background: var(--bg-body);
+    border-radius: var(--radius);
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.exercise-progress .score {
+    font-weight: 600;
+    color: var(--success);
+}
+
+.progress-dots {
+    display: flex;
+    gap: 0.25rem;
+}
+
+.progress-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--border);
+    transition: background 0.2s;
+}
+
+.progress-dot.correct { background: var(--success); }
+.progress-dot.incorrect { background: var(--danger); }
+.progress-dot.current { background: var(--primary); box-shadow: 0 0 0 2px var(--primary-light); }
+
+/* Individual exercise */
+.exercise-item {
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+}
+
+.exercise-header {
+    padding: 1rem 1.25rem;
+    background: var(--bg-body);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.exercise-type {
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 0.125rem 0.5rem;
+    border-radius: 9999px;
+}
+
+.exercise-type.mc { background: #dbeafe; color: #2563eb; }
+.exercise-type.tf { background: #fef3c7; color: #92400e; }
+.exercise-type.fill { background: #e0e7ff; color: #4338ca; }
+.exercise-type.error { background: #fee2e2; color: #dc2626; }
+.exercise-type.crossword { background: #d1fae5; color: #065f46; }
+.exercise-type.wordsearch { background: #fce7f3; color: #9d174d; }
+.exercise-type.proposed { background: #f1f5f9; color: #475569; }
+.exercise-type.ms { background: #ede9fe; color: #6d28d9; }
+
+.exercise-number {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+.exercise-body {
+    padding: 1.5rem;
+}
+
+.exercise-question {
+    font-size: 0.95rem;
+    margin-bottom: 1.25rem;
+    line-height: 1.6;
+}
+
+.exercise-question code {
+    font-family: 'Consolas', 'Fira Code', monospace;
+    background: #f1f5f9;
+    padding: 0.125em 0.375em;
+    border-radius: 3px;
+    font-size: 0.875em;
+    color: #7c3aed;
+}
+
+.exercise-question pre {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-left: 3px solid #6366f1;
+    padding: 0.75rem 1rem;
+    margin: 0.75rem 0;
+    border-radius: 0 var(--radius) var(--radius) 0;
+    font-family: 'Consolas', 'Fira Code', monospace;
+    font-size: 0.85rem;
+    line-height: 1.6;
+    overflow-x: auto;
+    white-space: pre;
+}
+
+/* Multiple choice options */
+.mc-options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.mc-option {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: all 0.15s;
+    font-size: 0.875rem;
+}
+
+.mc-option:hover:not(.disabled) {
+    border-color: var(--primary);
+    background: var(--primary-light);
+}
+
+.mc-option .letter {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--bg-body);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 0.75rem;
+    flex-shrink: 0;
+    border: 1px solid var(--border);
+}
+
+.mc-option.selected .letter {
+    background: var(--primary);
+    color: #fff;
+    border-color: var(--primary);
+}
+
+.mc-option.correct {
+    border-color: var(--success);
+    background: #f0fdf4;
+}
+
+.mc-option.correct .letter {
+    background: var(--success);
+    color: #fff;
+    border-color: var(--success);
+}
+
+.mc-option.incorrect {
+    border-color: var(--danger);
+    background: #fef2f2;
+}
+
+.mc-option.incorrect .letter {
+    background: var(--danger);
+    color: #fff;
+    border-color: var(--danger);
+}
+
+.mc-option.disabled { cursor: default; opacity: 0.7; }
+
+/* True/False */
+.tf-options {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.tf-btn {
+    flex: 1;
+    padding: 0.875rem;
+    border: 2px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--bg-surface);
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-align: center;
+    transition: all 0.15s;
+}
+
+.tf-btn:hover:not(.disabled) {
+    border-color: var(--primary);
+}
+
+.tf-btn.selected { border-color: var(--primary); background: var(--primary-light); color: var(--primary); }
+.tf-btn.correct { border-color: var(--success); background: #f0fdf4; color: var(--success); }
+.tf-btn.incorrect { border-color: var(--danger); background: #fef2f2; color: var(--danger); }
+.tf-btn.disabled { cursor: default; }
+
+/* Fill code */
+.fill-code-container {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-left: 3px solid #6366f1;
+    border-radius: 0 var(--radius) var(--radius) 0;
+    padding: 1rem 1.25rem;
+    font-family: 'Consolas', 'Fira Code', monospace;
+    font-size: 0.85rem;
+    line-height: 2;
+    white-space: pre-wrap;
+}
+
+.fill-blank {
+    display: inline-block;
+    min-width: 120px;
+    border: none;
+    border-bottom: 2px dashed var(--primary);
+    background: rgba(37, 99, 235, 0.05);
+    padding: 0.125rem 0.375rem;
+    font-family: inherit;
+    font-size: inherit;
+    color: var(--primary);
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.fill-blank:focus {
+    border-bottom-style: solid;
+    background: rgba(37, 99, 235, 0.1);
+}
+
+.fill-blank.correct {
+    border-color: var(--success);
+    color: var(--success);
+    background: rgba(22, 163, 74, 0.05);
+}
+
+.fill-blank.incorrect {
+    border-color: var(--danger);
+    color: var(--danger);
+    background: rgba(220, 38, 38, 0.05);
+}
+
+/* Find error */
+.error-code-container {
+    position: relative;
+}
+
+.error-code-container pre {
+    background: #fff5f5;
+    border: 1px solid #fecaca;
+    border-left: 3px solid #dc2626;
+}
+
+.error-line {
+    display: block;
+    padding: 0.125rem 0;
+    cursor: pointer;
+    transition: background 0.1s;
+}
+
+.error-line:hover { background: rgba(220, 38, 38, 0.08); }
+.error-line.selected { background: rgba(220, 38, 38, 0.15); border-radius: 2px; }
+.error-line.is-error { background: rgba(220, 38, 38, 0.2); }
+
+/* ============================================================
+   WORD SEARCH INTERACTIVA
+   ============================================================ */
+.wordsearch-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin: 1rem 0;
+}
+
+.ws-status-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.625rem 1rem;
+    background: #f8fafc;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    font-size: 0.85rem;
+}
+
+.ws-counter {
+    color: var(--text-main);
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+}
+
+.ws-counter i {
+    color: var(--primary);
+    font-size: 1.1rem;
+}
+
+.ws-clear-btn {
+    background: #fee2e2;
+    color: #dc2626;
+    border: 1px solid #fca5a5;
+    border-radius: var(--radius);
+    padding: 0.25rem 0.625rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    transition: all 0.15s;
+}
+
+.ws-clear-btn:hover {
+    background: #fecaca;
+}
+
+.wordsearch-grid-container {
+    overflow-x: auto;
+    padding: 0.75rem;
+    background: #f8fafc;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    display: inline-block;
+    max-width: 100%;
+}
+
+.wordsearch-grid {
+    display: inline-grid;
+    gap: 3px;
+    background: #e2e8f0;
+    padding: 3px;
+    border-radius: var(--radius);
+    user-select: none;
+}
+
+.ws-cell {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'JetBrains Mono', 'Consolas', monospace;
+    font-size: 0.95rem;
+    font-weight: 700;
+    background: #ffffff;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.15s;
+    text-transform: uppercase;
+    color: #1e293b;
+    box-shadow: var(--shadow-sm);
+}
+
+.ws-cell:hover {
+    background: #dbeafe;
+    color: var(--primary);
+    transform: scale(1.05);
+}
+
+.ws-cell.selected {
+    background: #2563eb !important;
+    color: #ffffff !important;
+    box-shadow: 0 0 0 2px #93c5fd;
+    transform: scale(1.08);
+    z-index: 2;
+}
+
+.ws-cell.found {
+    background: #dcfce7 !important;
+    color: #15803d !important;
+    font-weight: 800;
+}
+
+.ws-words-container {
+    background: #f8fafc;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1rem;
+}
+
+.ws-words-container h4 {
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    margin-bottom: 0.625rem;
+}
+
+.ws-words {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.625rem;
+}
+
+.ws-word {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.375rem 0.75rem;
+    background: #ffffff;
+    border: 1px solid var(--border);
+    border-radius: 9999px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    font-family: 'JetBrains Mono', 'Consolas', monospace;
+    color: var(--text-main);
+    transition: all 0.2s;
+}
+
+.ws-word i {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.ws-word.found {
+    background: #dcfce7;
+    border-color: #86efac;
+    color: #15803d;
+    text-decoration: line-through;
+}
+
+.ws-word.found i {
+    color: #16a34a;
+}
+
+/* ============================================================
+   CROSSWORD INTERACTIVO
+   ============================================================ */
+.crossword-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin: 1rem 0;
+}
+
+.crossword-grid-container {
+    overflow-x: auto;
+    padding: 0.5rem;
+    background: #f8fafc;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    display: inline-block;
+    max-width: 100%;
+}
+
+.crossword-grid {
+    display: inline-grid;
+    gap: 2px;
+    background: #cbd5e1;
+    border: 2px solid #334155;
+    border-radius: 4px;
+    padding: 2px;
+}
+
+.cw-cell {
+    width: 38px;
+    height: 38px;
+    position: relative;
+    background: #fff;
+    border-radius: 2px;
+}
+
+.cw-cell.black {
+    background: #1e293b;
+}
+
+.cw-cell input {
+    width: 100%;
+    height: 100%;
+    border: none;
+    text-align: center;
+    font-family: 'JetBrains Mono', 'Consolas', monospace;
+    font-size: 1.125rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    outline: none;
+    background: transparent;
+    color: #0f172a;
+    padding: 0;
+    margin: 0;
+    line-height: 38px;
+    transition: background 0.15s;
+}
+
+.cw-cell.active input:focus {
+    background: #e0f2fe;
+}
+
+.cw-cell .cw-number {
+    position: absolute;
+    top: 1px;
+    left: 2px;
+    font-size: 0.55rem;
+    font-weight: 700;
+    color: #475569;
+    pointer-events: none;
+    line-height: 1;
+    z-index: 2;
+}
+
+/* Estados de validación del crucigrama */
+.cw-cell.correct {
+    background: #dcfce7;
+}
+
+.cw-cell.correct input {
+    color: #15803d;
+}
+
+.cw-cell.revealed-correct {
+    background: #f0fdf4;
+}
+
+.cw-cell.revealed-correct input {
+    color: #166534;
+    font-weight: 700;
+}
+
+.cw-cell.incorrect {
+    background: #fee2e2;
+}
+
+.cw-cell.incorrect input {
+    color: #b91c1c;
+}
+
+/* Pistas del Crucigrama */
+.cw-clues {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
+.cw-clues-column {
+    background: #f8fafc;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1rem 1.25rem;
+}
+
+.cw-clues-column h4 {
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-main);
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+}
+
+.cw-clues-column h4 i {
+    font-size: 1rem;
+    color: var(--primary);
+}
+
+.cw-clues-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.cw-clue-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.625rem;
+    padding: 0.5rem 0.625rem;
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: background 0.15s, transform 0.1s;
+    font-size: 0.85rem;
+}
+
+.cw-clue-item:hover {
+    background: #e2e8f0;
+    transform: translateX(2px);
+}
+
+.cw-clue-badge {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.cw-clue-text {
+    line-height: 1.4;
+    color: var(--text-main);
+}
+
+.cw-clue-len {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    font-style: italic;
+}
+
+@media (max-width: 768px) {
+    .cw-clues {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Proposed exercises */
+.proposed-exercise {
+    padding: 1.25rem;
+    background: var(--bg-body);
+    border-radius: var(--radius);
+    border-left: 3px solid var(--primary);
+}
+
+.proposed-exercise p {
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+
+.proposed-exercise pre {
+    margin-top: 0.75rem;
+    background: #fff;
+}
+
+/* Feedback */
+.feedback {
+    margin-top: 1rem;
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius);
+    font-size: 0.85rem;
+    line-height: 1.5;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+}
+
+.feedback i { font-size: 1.125rem; flex-shrink: 0; margin-top: 0.125rem; }
+
+.feedback.correct {
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    color: #166534;
+}
+
+.feedback.incorrect {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    color: #991b1b;
+}
+
+/* Submit button */
+.check-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.625rem 1.25rem;
+    background: var(--primary);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius);
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.15s;
+    margin-top: 0.75rem;
+}
+
+.check-btn:hover { background: var(--primary-hover, #1d4ed8); }
+.check-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* Solution reveal */
+.solution-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.5rem 1rem;
+    background: none;
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    font-size: 0.8rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
+    margin-top: 0.75rem;
+}
+
+.solution-toggle:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+.solution-content {
+    margin-top: 0.75rem;
+    padding: 1rem;
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    border-radius: var(--radius);
+    font-size: 0.875rem;
+    line-height: 1.6;
+}
+
+.solution-content pre {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-left: 3px solid var(--success);
+    padding: 0.75rem 1rem;
+    margin: 0.5rem 0;
+    font-family: 'Consolas', 'Fira Code', monospace;
+    font-size: 0.85rem;
+    line-height: 1.6;
+    border-radius: 0 var(--radius) var(--radius) 0;
+    white-space: pre;
+    overflow-x: auto;
+}
+
+.solution-content code {
+    font-family: 'Consolas', 'Fira Code', monospace;
+    background: #f1f5f9;
+    padding: 0.125em 0.375em;
+    border-radius: 3px;
+    font-size: 0.85em;
+}
