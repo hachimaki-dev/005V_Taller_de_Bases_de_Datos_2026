@@ -5,6 +5,26 @@ const courseStructure = {
     courseName: 'Taller de Bases de Datos',
     modules: [
         {
+            id: '1-2',
+            title: '1.2 Cursores y Ciclos Anidados',
+            sessions: [
+                {
+                    id: '1-2-1',
+                    title: 'Sesión 1: Cursores Complejos',
+                    slidesFile: 's1_2_1_slides',
+                    exercisesFile: 's1_2_1_exercises',
+                    solutionsFile: 's1_2_1_solutions'
+                },
+                {
+                    id: '1-2-2',
+                    title: 'Sesión 2: Ciclos Anidados',
+                    slidesFile: 's1_2_2_slides',
+                    exercisesFile: 's1_2_2_exercises',
+                    solutionsFile: 's1_2_2_solutions'
+                }
+            ]
+        },
+        {
             id: '1-3',
             title: '1.3 Excepciones',
             sessions: [
@@ -43,6 +63,14 @@ const courseStructure = {
                     solutionsFile: 's1_4_2_solutions'
                 }
             ]
+        }
+    ],
+    evaluations: [
+        {
+            id: 'eval-1',
+            title: 'Evaluación 1: Proyecto Integral PL/SQL',
+            badge: 'Hito 1',
+            desc: 'Quizzes Previos (30%) + Informe Grupal (10%) + Defensa Oral (60%)'
         }
     ]
 };

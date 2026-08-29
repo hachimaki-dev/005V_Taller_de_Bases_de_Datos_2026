@@ -3,6 +3,12 @@ const { createApp, ref, computed } = Vue;
 
 // Mapa de archivos de datos a variables globales
 const dataMap = {
+    s1_2_1_slides: () => s1_2_1_slides,
+    s1_2_1_exercises: () => s1_2_1_exercises,
+    s1_2_1_solutions: () => s1_2_1_solutions,
+    s1_2_2_slides: () => s1_2_2_slides,
+    s1_2_2_exercises: () => s1_2_2_exercises,
+    s1_2_2_solutions: () => s1_2_2_solutions,
     s1_3_1_slides: () => s1_3_1_slides,
     s1_3_1_exercises: () => s1_3_1_exercises,
     s1_3_1_solutions: () => s1_3_1_solutions,
@@ -20,12 +26,14 @@ const dataMap = {
 const App = {
     components: {
         'slide-viewer': SlideViewer,
-        'exercise-runner': ExerciseRunner
+        'exercise-runner': ExerciseRunner,
+        'evaluation-viewer': EvaluationViewer
     },
     setup() {
         const course = ref(courseStructure);
-        const view = ref('home');
+        const view = ref('home'); // 'home' | 'session' | 'evaluation'
         const session = ref(null);
+        const currentEval = ref(null);
         const tab = ref('slides');
         const sidebarOpen = ref(false);
 
@@ -50,13 +58,22 @@ const App = {
         function goHome() {
             view.value = 'home';
             session.value = null;
+            currentEval.value = null;
             sidebarOpen.value = false;
         }
 
         function openSession(s) {
             session.value = s;
+            currentEval.value = null;
             view.value = 'session';
             tab.value = 'slides';
+            sidebarOpen.value = false;
+        }
+
+        function openEvaluation(ev) {
+            currentEval.value = ev.id === 'eval-1' ? evaluacion_1_data : null;
+            session.value = null;
+            view.value = 'evaluation';
             sidebarOpen.value = false;
         }
 
@@ -68,9 +85,9 @@ const App = {
         }
 
         return {
-            course, view, session, tab, sidebarOpen,
+            course, view, session, currentEval, tab, sidebarOpen,
             currentSlides, currentExercises, currentSolutions,
-            goHome, openSession, getModuleTitle
+            goHome, openSession, openEvaluation, getModuleTitle
         };
     }
 };

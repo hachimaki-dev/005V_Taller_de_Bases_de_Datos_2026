@@ -37,6 +37,17 @@
                     <i class="ph ph-house"></i> Inicio
                 </button>
                 <div class="nav-divider"></div>
+                <div class="nav-group" v-if="course.evaluations && course.evaluations.length > 0">
+                    <div class="nav-group-label">Evaluaciones Oficiales</div>
+                    <button v-for="ev in course.evaluations" :key="ev.id"
+                            class="nav-link"
+                            :class="{ active: view === 'evaluation' && currentEval && currentEval.id === ev.id }"
+                            @click="openEvaluation(ev)">
+                        <i class="ph ph-certificate"></i>
+                        <span>{{ ev.title }}</span>
+                    </button>
+                </div>
+                <div class="nav-divider"></div>
                 <div v-for="mod in course.modules" :key="mod.id" class="nav-group">
                     <div class="nav-group-label">{{ mod.title }}</div>
                     <button v-for="s in mod.sessions" :key="s.id"
@@ -66,8 +77,25 @@
             <template v-if="view === 'home'">
                 <div class="dashboard-hero fade-in">
                     <h1>Taller de Bases de Datos</h1>
-                    <p>Selecciona una sesión del menú para acceder a las presentaciones, guías de ejercicios y solucionarios.</p>
+                    <p>Selecciona una sesión del menú para acceder a las presentaciones, guías de ejercicios, solucionarios y pautas de evaluación.</p>
                 </div>
+
+                <!-- Banner destacado Evaluación 1 -->
+                <div v-if="course.evaluations && course.evaluations.length > 0" class="eval-card fade-in" style="margin-bottom: 2rem; border-left: 4px solid var(--primary); background: linear-gradient(to right, #ffffff, #f8fafc);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                        <div>
+                            <span class="badge" style="background:#ede9fe; color:#6d28d9; font-weight:700; padding:0.25rem 0.625rem; border-radius:9999px; margin-bottom:0.5rem; display:inline-block;">
+                                <i class="ph ph-certificate"></i> Hito 1 (100%)
+                            </span>
+                            <h2 style="font-size: 1.25rem; font-weight: 700; margin: 0.25rem 0;">{{ course.evaluations[0].title }}</h2>
+                            <p style="font-size: 0.875rem; color: var(--text-muted); margin: 0;">{{ course.evaluations[0].desc }}</p>
+                        </div>
+                        <button class="check-btn" @click="openEvaluation(course.evaluations[0])" style="margin: 0; padding: 0.625rem 1.25rem;">
+                            <i class="ph ph-arrow-right"></i> Ver Instrucciones y Pauta
+                        </button>
+                    </div>
+                </div>
+
                 <div class="module-grid">
                     <div v-for="mod in course.modules" :key="'d-'+mod.id" class="module-card fade-in">
                         <h3>{{ mod.title }} <span class="badge">{{ mod.sessions.length }} sesiones</span></h3>
@@ -80,7 +108,12 @@
                 </div>
             </template>
 
-            <!-- SESSION -->
+            <!-- EVALUATION VIEW -->
+            <template v-if="view === 'evaluation' && currentEval">
+                <evaluation-viewer :eval-data="currentEval"></evaluation-viewer>
+            </template>
+
+            <!-- SESSION VIEW -->
             <template v-if="view === 'session' && session">
                 <div class="fade-in">
                     <div class="session-breadcrumb">{{ getModuleTitle(session.id) }}</div>
@@ -111,6 +144,13 @@
 
     <!-- Data files -->
     <script src="js/data/course-structure.js"></script>
+    <script src="js/data/evaluacion_1_data.js"></script>
+    <script src="js/data/s1_2_1_slides.js"></script>
+    <script src="js/data/s1_2_1_exercises.js"></script>
+    <script src="js/data/s1_2_1_solutions.js"></script>
+    <script src="js/data/s1_2_2_slides.js"></script>
+    <script src="js/data/s1_2_2_exercises.js"></script>
+    <script src="js/data/s1_2_2_solutions.js"></script>
     <script src="js/data/s1_3_1_slides.js"></script>
     <script src="js/data/s1_3_1_exercises.js"></script>
     <script src="js/data/s1_3_1_solutions.js"></script>
@@ -127,6 +167,7 @@
     <!-- Components -->
     <script src="js/components/SlideViewer.js"></script>
     <script src="js/components/ExerciseRunner.js"></script>
+    <script src="js/components/EvaluationViewer.js"></script>
 
     <!-- App -->
     <script src="js/app.js"></script>
